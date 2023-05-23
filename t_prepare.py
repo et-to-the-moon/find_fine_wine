@@ -14,9 +14,36 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 
 ##### FUNCTIONS #####
 
+def rename_col(df):
+    '''Rename columns by replacing spaces with _'''
+    # get rid of spaces in column names
+    for col in df.columns:
+        df = df.rename(columns={col: col.replace(' ','_')})
+    return df
+
 def wine_out(df):
+    '''Get rid of the small amount of outliers'''
+    # Filter rows based on column: 'residual sugar'
+    df = df[df['residual_sugar'] < 33]
+    # Filter rows based on column: 'free sulfur dioxide'
+    df = df[df['free_sulfur_dioxide'] < 280]
     # Filter rows based on column: 'chlorides'
-    return df[df['chlorides'] < df['chlorides'].quantile(.993)]
+    return df[df['chlorides'] < 0.21]
+
+def add_feature(df):
+    '''Add features for explore'''
+    # Derive column 'bound_sulfur_dioxide' from column: 'free_sulfur_dioxide'
+    df.insert(6, 'bound_sulfur_dioxide', df.apply(lambda row : (row['total_sulfur_dioxide']-row['free_sulfur_dioxide']), axis=1))
+    # create bool column on sweet or not
+    # df.insert(4, 'sweet', df.apply(lambda row : (row['residual_sugar'] > 35), axis=1)) # only one sweet wine so not useful
+    return df
+
+def prep_wine(df):
+    '''Combined prep functions'''
+    df = rename_col(df)
+    df = wine_out(df)
+    df = add_feature(df)
+    return df
 
 ##### SPLIT DATA #####
 
