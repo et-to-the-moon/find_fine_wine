@@ -58,9 +58,9 @@ Predict wine quality by using clustering techniques to create features for a mac
 
 | **Column**          | **Description**                                            |
 |---------------------|--------------------------------------------------------    |
-| **fixed_acidity**   | Ranges between 4.8 and 14.2, and gauges the amount of a set of organic acids, ensures wine doesn't feel flat and soapy, can't be converted to gas so must go through kidnes 
+| **fixed_acidity**   | Ranges between 4.8 mg/L and 14.2mg/L, and gauges the amount of a set of organic acids, ensures wine doesn't feel flat and soapy, can't be converted to gas so must go through kidneys 
    |
-| **volatile_acidity**| Acid that primarily affects smell, and tase of vinegar, lower is better    
+| **volatile_acidity**| Acid that primarily affects smell, and tase of vinegar, lower is better g/mL    
    |
 | **citric_acid**     | found in small quantities, citric acid can add freshness’ and flavor to wines
    |
@@ -87,19 +87,18 @@ Predict wine quality by using clustering techniques to create features for a mac
 ## Steps to Reproduce
 
     1. Clone this repo
-    2. Acquire the data from CodeUp, Telco_churn
+    2. Acquire the data from data.world
     3. Put the data in the file containing the cloned repo
     4. Run notebook
       
      
 ## Takeaways and Conclusions
 
-Bathroom count is the greatest indicator for home value among my features.
       
       
 ## Recommendations
 
-Offer discounts to senior citizens to reduce churn, and family bundle discounts to fortify the lower churn rate of those with partners and dependents.
+
       
       
       
