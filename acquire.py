@@ -2,7 +2,7 @@
 Acquire Wine Quality Data
 
 Functions:
-
+- get_wine
 '''
 
 ##### IMPORTS #####
