@@ -62,27 +62,43 @@ Predict wine quality by using clustering techniques to create features for a mac
    |
 | **volatile_acidity**| Acid that primarily affects smell, and tase of vinegar, lower is better g/mL    
    |
-| **citric_acid**     | found in small quantities, citric acid can add freshness’ and flavor to wines
+| **citric_acid**     | found in small quantities, citric acid can add freshness’, sourness, and flavor to wines
    |
-| **residual_sugar**  | the amount of sugar remaining after fermentation stops, it’s rare to find wines with less than 1 gram/liter and wines with greater than 45 grams/liter are considered sweet         
+| **residual_sugar**  | the amount of sugar remaining after fermentation stops, it’s rare to find wines with less than 1 gram/liter and wines with greater than 45 grams/liter are considered sweet if over 35 g/L         
    |
-| **chlorides**       |  the amount of salt in the wine                            |
-| **free_SO2**        | the free form of SO2 exists in equilibrium between molecular SO2 (as a dissolved gas) and bisulfite ion; it prevents microbial growth and the oxidation of wine                             
+| **chlorides**       |  the amount of salt in the wine    
    |
-| **total_SO2**       | amount of free and bound forms of S02; in low concentrations, SO2 is mostly undetectable in wine, but at free SO2 concentrations over 50 ppm, SO2 becomes evident in the nose and taste of wine      |  
+| **free_SO2**        | Related to pH. Determines how much SO2 is available. (Increases shelf-life, decreases palatability)          |
+| **total_SO2**       | Summation of free and bound SO2. (Limited to 350ppm: 0-150, low-processed, 150+ highly processed)
+   |  
 | **density**         | the density of water is close to that of water depending on the percent alcohol and sugar content
    |
 | **pH**              | describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale
    |
-| **sulphates**       | a wine additive which can contribute to sulfur dioxide gas (S02) levels, wich acts as an antimicrobial and antioxidant
+| **sulphates**       | Added to stop fermentation, which acts as an antimicrobial and antioxidant
    |
 | **alcohol**         | the percent alcohol content of the wine
    |
-| **quality**         | 
+| **quality**         | rating from 1 to 10
    |
-| **red**             |
+| **red**             | color and category of wine, 1
+   |
+| **white**           | color and category of wine, 0
 
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Steps to Reproduce
 
