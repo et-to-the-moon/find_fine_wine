@@ -3,8 +3,10 @@
 Functions:
 - metrics_reg
 - baseline
+- rfe_rev
 - reg_mods
 - final_models
+- cluster_model
 - test_model
 - plt_err
 '''
@@ -156,6 +158,28 @@ def reg_mods(Xtr,ytr,Xv,yv,features=None,alpha=1,degree=2):
                     'r2_v':r2_v
                 }
             metrics.append(output)
+        # cycle through feature combos, alphas, and powers for tweedie reg
+        for feature,a,p in itertools.product(itertools.combinations(features,r),alpha):
+            f = list(feature)
+            # tweedie regressor glm
+            lm = TweedieRegressor(power=0,alpha=a)
+            lm.fit(Xtr[f],ytr.prop_value)
+            # metrics
+            pred_lm_tr = lm.predict(Xtr[f])
+            rmse_tr,r2_tr = metrics_reg(ytr,pred_lm_tr)
+            pred_lm_v = lm.predict(Xv[f])
+            rmse_v,r2_v = metrics_reg(yv,pred_lm_v)
+            # table-ize
+            output ={
+                    'model':'TweedieRegressor',
+                    'features':f,
+                    'params':f'power=0,alpha={a}',
+                    'rmse_tr':rmse_tr,
+                    'rmse_v':rmse_v,
+                    'r2_tr':r2_tr,
+                    'r2_v':r2_v
+                }
+            metrics.append(output)
     return pd.DataFrame(metrics)
 
 def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_val):
@@ -262,7 +286,7 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         print('Please include model argument: lr, poly, tweedie, lasso')
 
 def cluster_model(Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_val):
-    '''Get cluster model result'''
+    '''Input scaled train and validate for cluster model result'''
     # features
     fr=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
     fw=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
