@@ -159,11 +159,11 @@ def reg_mods(Xtr,ytr,Xv,yv,features=None,alpha=1,degree=2):
                 }
             metrics.append(output)
         # cycle through feature combos, alphas, and powers for tweedie reg
-        for feature,a,p in itertools.product(itertools.combinations(features,r),alpha):
+        for feature,a in itertools.product(itertools.combinations(features,r),alpha):
             f = list(feature)
             # tweedie regressor glm
             lm = TweedieRegressor(power=0,alpha=a)
-            lm.fit(Xtr[f],ytr.prop_value)
+            lm.fit(Xtr[f],ytr.quality)
             # metrics
             pred_lm_tr = lm.predict(Xtr[f])
             rmse_tr,r2_tr = metrics_reg(ytr,pred_lm_tr)
