@@ -63,4 +63,8 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 
 ## Takeaways and Conclusions
 
-## Recommendations
+## Recommendations and Next Steps
+
+- 
+- Given more time we would look at evaluation metrics for clustering to hopefully find better groupings of data using more than three features
+- Just go to the store and get some $10 wine since it will probably taste just fine
