@@ -46,7 +46,7 @@ def baseline(train,val):
     yv_p = blv.assign(pred_mean=pred_mean)
     rmse_tr = mean_squared_error(blt.quality,ytr_p.pred_mean)**.5
     rmse_v = mean_squared_error(blv.quality,yv_p.pred_mean)**.5
-    print(f'Baseline    Red:  {round(((blt[blt.red==1].quality).mean()),2)}  White: {round(((blt[blt.red==0].quality).mean()),2)}')
+    print(f'Baseline    Red:  {round(((blt[blt.wine_type=="red"].quality).mean()),2)}  White: {round(((blt[blt.wine_type=="white"].quality).mean()),2)}')
     print(f'Train       RMSE: {round(rmse_tr,2)}  RMSE:  {round(rmse_tr,2)}')
     print(f'Validate    RMSE: {round(rmse_v,2)}  RMSE:  {round(rmse_v,2)}')
 

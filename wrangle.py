@@ -43,9 +43,9 @@ def get_wine():
     else:
         # data.world links
         df1 = pd.read_csv('https://query.data.world/s/jvqglydhtwbdwm22t6fsontdgvxbuk?dws=00000')
-        df1 = df1.assign(red=1)
+        df1 = df1.assign(wine_type='red')
         df2 = pd.read_csv('https://query.data.world/s/jjdvspurcnyimwd3pp3gnrjifs57fs?dws=00000')
-        df2 = df2.assign(red=0)
+        df2 = df2.assign(wine_type='white')
         df = pd.concat([df1,df2],ignore_index=True)
         # cache data locally
         df.to_csv(filename, index=False)
@@ -114,8 +114,8 @@ def wine_out_w(df):
 
 def prep_w_wine(df):
     '''Combined prep functions for white wine'''
-    # Drop column: 'red'
-    df = df.drop(columns=['red'])
+    # Drop column: 'wine_type'
+    df = df.drop(columns=['wine_type'])
     df = rename_col(df)
     df = wine_out(df)
     df = add_feature(df)
