@@ -45,6 +45,27 @@ def prep_wine(df):
     df = add_feature(df)
     return df
 
+def wine_out_w(df):
+    '''Get rid of the small amount of outliers ofr white wine'''
+    # Filter rows based on column: 'chlorides'
+    df = df[df['chlorides'] < .125]
+    # Filter rows based on column: 'fixed_acidity'
+    df = df[df['fixed_acidity'] < 10.8]
+    # Filter rows based on column: 'citric_acid'
+    df = df[df['citric_acid'] < 1]
+    # Filter rows based on column: 'free_sulfur_dioxide'
+    df = df[df['free_sulfur_dioxide'] < 280]
+    return df[df['residual_sugar'] < 25]
+
+def prep_w_wine(df):
+    '''Combined prep functions for white wine'''
+    # Drop column: 'red'
+    df = df.drop(columns=['red'])
+    df = rename_col(df)
+    df = wine_out(df)
+    df = add_feature(df)
+    return df
+
 ##### SPLIT DATA #####
 
 def split_data(df):
