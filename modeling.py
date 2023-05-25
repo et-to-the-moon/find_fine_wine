@@ -192,7 +192,7 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
     Please include model argument: lr, poly, tweedie, lasso'''
     if model == 'lr':
         # features
-        fr=['fixed_acidity_s', 'volatile_acidity_s', 'residual_sugar_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
+        fr=['fixed_acidity_s', 'volatile_acidity_s', 'residual_sugar_s', 'citric_acid_s', 'free_so2_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         fw=['volatile_acidity_s', 'residual_sugar_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         # model
         lrr = LinearRegression()
@@ -243,7 +243,7 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
     elif model == 'tweedie':
         # features
-        fr=['fixed_acidity_s','volatile_acidity_s', 'citric_acid_s', 'residual_sugar_s', 'chlorides_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
+        fr=['fixed_acidity_s','volatile_acidity_s', 'citric_acid_s', 'residual_sugar_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         fw=['volatile_acidity_s', 'citric_acid_s', 'residual_sugar_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         # model
         trr = TweedieRegressor(alpha=1,power=0)
