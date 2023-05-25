@@ -23,6 +23,9 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression, LassoLars, TweedieRegressor
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.feature_selection import RFE
+from sklearn.cluster import KMeans
+
+import wrangle as w
 
 ######### FUNCTIONS #########
 
@@ -285,18 +288,38 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
     else:
         print('Please include model argument: lr, poly, tweedie, lasso')
 
+def den_alc_cluster(Xtr,Xv):
+    '''Create density alcohol cluster and scale for modeling
+    
+    This will scale, cluster, add cluster to unscaled, then scale for modeling'''
+    Xtr_s,Xv_s,dummy_X = w.std(Xtr,Xv,Xv)
+    Xtr_sda,Xv_sda = Xtr_s[['density_s','alcohol_s']],Xv_s[['density_s','alcohol_s']]
+    km = KMeans(n_clusters=5,random_state=42)
+    km.fit(Xtr_sda)
+    Xtr['density_alcohol'],Xv['density_alcohol'] = km.predict(Xtr_sda),km.predict(Xv_sda)
+    Xtr.density_alcohol = Xtr.density_alcohol.map({0:'hi_den_lo_alc',1:'lo_den_med_alc',2:'med_den_med_alc',3:'lo_den_hi_alc',4:'med_den_lo_alc'})
+    Xv.density_alcohol = Xv.density_alcohol.map({0:'hi_den_lo_alc',1:'lo_den_med_alc',2:'med_den_med_alc',3:'lo_den_hi_alc',4:'med_den_lo_alc'})
+    Xtr,Xv = pd.concat([Xtr,pd.get_dummies(Xtr.density_alcohol)],axis=1),pd.concat([Xv,pd.get_dummies(Xv.density_alcohol)],axis=1)
+    Xtr_s,Xv_s,dummy_s = w.std(Xtr.select_dtypes(exclude='object'),Xv.select_dtypes(exclude='object'),Xv.select_dtypes(exclude='object'))
+    return Xtr_s,Xv_s
+
 def cluster_model(Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_val):
-    '''Input scaled train and validate for cluster model result'''
+    '''Input unscaled train and validate for cluster model result
+    
+    This will scale, cluster, add cluster to unscaled, then scale for modeling
+    '''
+    Xr_train_da,Xr_val_da = den_alc_cluster(Xr_train,Xr_val)
+    Xw_train_da,Xw_val_da = den_alc_cluster(Xw_train,Xw_val)
     # features
     fr=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
     fw=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
     # polynomial feature regression
     pfr = PolynomialFeatures(degree=3)
     pfw = PolynomialFeatures(degree=3)
-    Xr_train_pf = pfr.fit_transform(Xr_train[fr])
-    Xr_val_pf = pfr.transform(Xr_val[fr])
-    Xw_train_pf = pfw.fit_transform(Xw_train[fw])
-    Xw_val_pf = pfw.transform(Xw_val[fw])
+    Xr_train_pf = pfr.fit_transform(Xr_train_da[fr])
+    Xr_val_pf = pfr.transform(Xr_val_da[fr])
+    Xw_train_pf = pfw.fit_transform(Xw_train_da[fw])
+    Xw_val_pf = pfw.transform(Xw_val_da[fw])
     # model
     prr = LinearRegression()
     prw = LinearRegression()
