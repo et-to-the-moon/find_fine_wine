@@ -29,7 +29,11 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
   - Select most relevant and interesting visualizations for final report
   - Find out which features have the strongest relationship with the target variable
   - Answer the following initial questions
-    - Is there a correlation between ??? and quality?
+    - Is there a difference in quality among wine types (red/white)?
+    - Is there a difference for red wine quality among clustered volatile acidity and residual sugar?
+    - Is there a difference for white wine quality among clustered volatile acidity and residual sugar?
+    - Is there a difference for white wine quality among clustered density and alcohol?
+    - Is there a difference for red wine quality among clustered density and alcohol?
 - Develop a model to predict wine quality
   - Use drivers identified in explore
   - Choose Evaluation Metric
@@ -61,10 +65,18 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 1) Clone this repo
 2) Run notebook
 
-## Takeaways and Conclusions
+## Conclusion
 
-## Recommendations and Next Steps
+### Takeaways and Key Findings
+- Predicting wine quality is difficult
+- Red wine seems to be a little easier to predict than white wine
+    - Probably easier to taste differences from the tannins compared to white wine
 
-- 
-- Given more time we would look at evaluation metrics for clustering to hopefully find better groupings of data using more than three features
+### Recommendations and Next Steps
 - Just go to the store and get some $10 wine since it will probably taste just fine
+- Given more time we would look at evaluation metrics for clustering
+    - hopefully find better groupings of data using more features
+- Maybe having more data could help
+    - Year of the wine
+    - Grape variety
+    - Price of the wine
