@@ -43,7 +43,7 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 | **Feature**          | Type    | **Description**                                                                                    |
 | :------------------------- | :------ | :------------------------------------------------------------------------------------------------------- |
 | **fixed_acidity**    | g/L     | Amount of tartaric acids, ensures wine doesn't feel flat and soapy                                      |
-| **volatile_acidity** | g/L     | Amount of acetic aci, primarily affects smell and tastes of vinegar, lower is better                   |
+| **volatile_acidity** | g/L     | Amount of acetic acid, primarily affects smell and tastes of vinegar, lower is better                   |
 | **citric_acid**      | g/L     | Amount of citric acid, can add freshness, sourness, and flavor to wines                                  |
 | **residual_sugar**   | g/L     | Amount of sugar remaining after fermentation stops                                                       |
 | **chlorides**        | g/L     | Amount of sodium in the wine (Affects color, clarity, flavor, aroma)                                    |
@@ -51,7 +51,7 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 | **total_SO2**        | mg/L    | Sum of free and bound Sulfur Dioxide. (Limited to 350ppm: 0-150, low-processed, 150+ highly processed)   |
 | **density**          | g/L     | Density of water is close to that of water depending on the percent alcohol and sugar content            |
 | **pH**               | Numeric | How acidic or basic from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale |
-| **sulphates**        | g/L     | Added to stop fermentation, which acts as an antimicrobial and antioxidant                               |
+| **sulfates**        | g/L     | Added to stop fermentation, which acts as an antimicrobial and antioxidant                               |
 | **alcohol**          | vol%    | Percent alcohol content of the wine                                                                      |
 | **quality (target)** | Numeric | Median of at least 3 evaluations made by wine experts from 0 (very bad) to 10 (very excellent)           |
 | **red**              | Boolean | Color and category of wine, 1 for red, 0 for white                                                       |
@@ -63,8 +63,9 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 
 ## Takeaways and Conclusions
 
+-
+
 ## Recommendations and Next Steps
 
-- 
 - Given more time we would look at evaluation metrics for clustering to hopefully find better groupings of data using more than three features
 - Just go to the store and get some $10 wine since it will probably taste just fine
