@@ -2,6 +2,8 @@
 
 How can you dine without some fine wine?
 
+[Slides](https://www.canva.com/design/DAFj7k17tXU/6JWBpMjxQTBk5X1maWLRtg/edit?utm_content=DAFj7k17tXU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 ### Project Description
 
 Wine is a staple in social events, there are 2 general categories of wine though their qualities and methods of production can vary immensely. The variation between the qualities identified by connoisseurs of the wine have an impact on the quality, thus the quality of the wine may be predictable.
@@ -29,7 +31,11 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
   - Select most relevant and interesting visualizations for final report
   - Find out which features have the strongest relationship with the target variable
   - Answer the following initial questions
-    - Is there a correlation between ??? and quality?
+    - Is there a difference in quality among wine types (red/white)?
+    - Is there a difference for red wine quality among clustered volatile acidity and residual sugar?
+    - Is there a difference for white wine quality among clustered volatile acidity and residual sugar?
+    - Is there a difference for white wine quality among clustered density and alcohol?
+    - Is there a difference for red wine quality among clustered density and alcohol?
 - Develop a model to predict wine quality
   - Use drivers identified in explore
   - Choose Evaluation Metric
@@ -43,7 +49,7 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 | **Feature**          | Type    | **Description**                                                                                    |
 | :------------------------- | :------ | :------------------------------------------------------------------------------------------------------- |
 | **fixed_acidity**    | g/L     | Amount of tartaric acids, ensures wine doesn't feel flat and soapy                                      |
-| **volatile_acidity** | g/L     | Amount of acetic acid, primarily affects smell and tastes of vinegar, lower is better                   |
+| **volatile_acidity** | g/L     | Amount of acetic acid, primarily affects smell and tastes of vinegar, lower is better                  |
 | **citric_acid**      | g/L     | Amount of citric acid, can add freshness, sourness, and flavor to wines                                  |
 | **residual_sugar**   | g/L     | Amount of sugar remaining after fermentation stops                                                       |
 | **chlorides**        | g/L     | Amount of sodium in the wine (Affects color, clarity, flavor, aroma)                                    |
@@ -51,7 +57,7 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 | **total_SO2**        | mg/L    | Sum of free and bound Sulfur Dioxide. (Limited to 350ppm: 0-150, low-processed, 150+ highly processed)   |
 | **density**          | g/L     | Density of water is close to that of water depending on the percent alcohol and sugar content            |
 | **pH**               | Numeric | How acidic or basic from 0 (very acidic) to 14 (very basic); most wines are between 3-4 on the pH scale |
-| **sulfates**        | g/L     | Added to stop fermentation, which acts as an antimicrobial and antioxidant                               |
+| **sulfates**         | g/L     | Added to stop fermentation, which acts as an antimicrobial and antioxidant                               |
 | **alcohol**          | vol%    | Percent alcohol content of the wine                                                                      |
 | **quality (target)** | Numeric | Median of at least 3 evaluations made by wine experts from 0 (very bad) to 10 (very excellent)           |
 | **red**              | Boolean | Color and category of wine, 1 for red, 0 for white                                                       |
@@ -61,11 +67,25 @@ Our initial hypothesis is that drivers of wine quality will be difficult to disc
 1) Clone this repo
 2) Run notebook
 
-## Takeaways and Conclusions
+## Conclusion
 
--
+### Takeaways and Key Findings
 
-## Recommendations and Next Steps
+- Predicting wine quality is difficult
+  - Clustering was not better than normal features for predicting wine quality
+- Red wine seems to be a little easier to predict than white wine
+  - Probably easier to taste differences from the tannins compared to white wine
+- Model was better then baseline but not significantly so, and can use improvement
 
-- Given more time we would look at evaluation metrics for clustering to hopefully find better groupings of data using more than three features
-- Just go to the store and get some $10 wine since it will probably taste just fine
+### Recommendations and Next Steps
+
+- Since wine quality, as of now, is difficult to predict we would recommend focusing on branding, since quality can be perceived based on brand
+- Given more time we would look at evaluation metrics for clustering
+  - hopefully find better groupings of data using more features
+- Maybe having more data could help
+  - Year of the wine
+  - Grape origin
+  - Grape variety
+  - Price of the wine
+  - Brand
+  - Whether the tastings were done blindly

@@ -1,5 +1,4 @@
 '''Model Zillow data
-
 Functions:
 - metrics_reg
 - baseline
@@ -10,25 +9,19 @@ Functions:
 - test_model
 - plt_err
 '''
-
 ########## IMPORTS ##########
 import pandas as pd
 import numpy as np
 import itertools
-
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression, LassoLars, TweedieRegressor
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.feature_selection import RFE
-from sklearn.cluster import KMeans
-
 import wrangle as w
-
+import explore as e
 ######### FUNCTIONS #########
-
 def metrics_reg(y, y_pred):
     """
     Input y and y_pred & get RMSE, R2
@@ -36,7 +29,6 @@ def metrics_reg(y, y_pred):
     rmse = mean_squared_error(y, y_pred, squared=False)
     r2 = r2_score(y, y_pred)
     return round(rmse,2), round(r2,4)
-
 def baseline(train,val):
     """
     The function calculates and prints the baseline metrics of a model
@@ -49,10 +41,10 @@ def baseline(train,val):
     yv_p = blv.assign(pred_mean=pred_mean)
     rmse_tr = mean_squared_error(blt.quality,ytr_p.pred_mean)**.5
     rmse_v = mean_squared_error(blv.quality,yv_p.pred_mean)**.5
-    print(f'Baseline    Red:  {round(((blt[blt.wine_type=="red"].quality).mean()),2)}  White: {round(((blt[blt.wine_type=="white"].quality).mean()),2)}')
+    print('                  Red          White')
+    print(f'Baseline    Mean: {round(((blt[blt.wine_type=="red"].quality).mean()),2)}   Mean: {round(((blt[blt.wine_type=="white"].quality).mean()),2)}')
     print(f'Train       RMSE: {round(rmse_tr,2)}  RMSE:  {round(rmse_tr,2)}')
     print(f'Validate    RMSE: {round(rmse_v,2)}  RMSE:  {round(rmse_v,2)}')
-
 def rfe_rev(Xs_train,y_train,r):
     '''Get RFE ranks in a dataframe'''
     lr = LinearRegression()
@@ -60,7 +52,6 @@ def rfe_rev(Xs_train,y_train,r):
     rfe.fit(Xs_train,y_train)
     rfe_ranks_df = pd.DataFrame({'Var':Xs_train.columns.to_list(),'Rank':rfe.ranking_})
     return rfe_ranks_df.sort_values('Rank')
-
 def reg_mods(Xtr,ytr,Xv,yv,features=None,alpha=1,degree=2):
     '''
     Input scaled X_train,y_train,X_val,y_val, list of features, alpha, and degree
@@ -184,7 +175,6 @@ def reg_mods(Xtr,ytr,Xv,yv,features=None,alpha=1,degree=2):
                 }
             metrics.append(output)
     return pd.DataFrame(metrics)
-
 def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_val):
     '''Input model type along with scaled train and validate data and
     it will return RMSE results per the selected model
@@ -209,12 +199,12 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         rmse_trw,r2_tr = metrics_reg(yw_train,pred_lrw_tr)
         pred_lrw_v = lrw.predict(Xw_val[fw])
         rmse_vw,r2_v = metrics_reg(yw_val,pred_lrw_v)
-        print('Linear Reg  Red:        White:')
+        print('Linear Reg        Red          White')
         print(f'Train       RMSE: {round(rmse_trr,2)}  RMSE:  {round(rmse_trw,2)}')
         print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
     elif model == 'poly':
         # features
-        fr=['volatile_acidity_s', 'total_so2_s', 'alcohol_s','sulphates_s']
+        fr=['volatile_acidity_s', 'total_so2_s', 'sulphates_s', 'alcohol_s']
         fw=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'alcohol_s']
         # polynomial feature regression
         pfr = PolynomialFeatures(degree=3)
@@ -238,12 +228,12 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         rmse_trw,r2_tr = metrics_reg(yw_train,pred_prw_tr)
         pred_prw_v = prw.predict(Xw_val_pf)
         rmse_vw,r2_v = metrics_reg(yw_val,pred_prw_v)
-        print('Polynomial  Red:        White:')
+        print('Polynomial        Red          White')
         print(f'Train       RMSE: {round(rmse_trr,2)}  RMSE:  {round(rmse_trw,2)}')
         print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
     elif model == 'tweedie':
         # features
-        fr=['fixed_acidity_s','volatile_acidity_s', 'citric_acid_s', 'free_so2_s', 'total_so2_s', 'pH_s', 'sulphates_s', 'alcohol_s']
+        fr=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'free_so2_s', 'total_so2_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         fw=['volatile_acidity_s', 'citric_acid_s', 'residual_sugar_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'density_s', 'pH_s', 'sulphates_s', 'alcohol_s']
         # model
         trr = TweedieRegressor(alpha=1,power=0)
@@ -260,7 +250,7 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         rmse_trw,r2_tr = metrics_reg(yw_train,pred_trw_tr)
         pred_trw_v = trw.predict(Xw_val[fw])
         rmse_vw,r2_v = metrics_reg(yw_val,pred_trw_v)
-        print('Tweedie     Red:        White:')
+        print('Tweedie           Red          White')
         print(f'Train       RMSE: {round(rmse_trr,2)}  RMSE:  {round(rmse_trw,2)}')
         print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
     elif model == 'lasso':
@@ -282,37 +272,21 @@ def final_models(model,Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,
         rmse_trw,r2_tr = metrics_reg(yw_train,pred_llw_tr)
         pred_llw_v = llw.predict(Xw_val[fw])
         rmse_vw,r2_v = metrics_reg(yw_val,pred_llw_v)
-        print('Lasso Lars  Red:        White:')
+        print('Lasso Lars        Red          White')
         print(f'Train       RMSE: {round(rmse_trr,2)}  RMSE:  {round(rmse_trw,2)}')
         print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
     else:
         print('Please include model argument: lr, poly, tweedie, lasso')
-
-def den_alc_cluster(Xtr,Xv):
-    '''Create density alcohol cluster and scale for modeling
-    
-    This will scale, cluster, add cluster to unscaled, then scale for modeling'''
-    Xtr_s,Xv_s,dummy_X = w.std(Xtr,Xv,Xv)
-    Xtr_sda,Xv_sda = Xtr_s[['density_s','alcohol_s']],Xv_s[['density_s','alcohol_s']]
-    km = KMeans(n_clusters=5,random_state=42)
-    km.fit(Xtr_sda)
-    Xtr['density_alcohol'],Xv['density_alcohol'] = km.predict(Xtr_sda),km.predict(Xv_sda)
-    Xtr.density_alcohol = Xtr.density_alcohol.map({0:'hi_den_lo_alc',1:'lo_den_med_alc',2:'med_den_med_alc',3:'lo_den_hi_alc',4:'med_den_lo_alc'})
-    Xv.density_alcohol = Xv.density_alcohol.map({0:'hi_den_lo_alc',1:'lo_den_med_alc',2:'med_den_med_alc',3:'lo_den_hi_alc',4:'med_den_lo_alc'})
-    Xtr,Xv = pd.concat([Xtr,pd.get_dummies(Xtr.density_alcohol)],axis=1),pd.concat([Xv,pd.get_dummies(Xv.density_alcohol)],axis=1)
-    Xtr_s,Xv_s,dummy_s = w.std(Xtr.select_dtypes(exclude='object'),Xv.select_dtypes(exclude='object'),Xv.select_dtypes(exclude='object'))
-    return Xtr_s,Xv_s
-
 def cluster_model(Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_val):
     '''Input unscaled train and validate for cluster model result
     
     This will scale, cluster, add cluster to unscaled, then scale for modeling
     '''
-    Xr_train_da,Xr_val_da = den_alc_cluster(Xr_train,Xr_val)
-    Xw_train_da,Xw_val_da = den_alc_cluster(Xw_train,Xw_val)
+    Xr_train_da,Xr_val_da = e.vol_sug_red_cluster(Xr_train,Xr_val)
+    Xw_train_da,Xw_val_da = e.den_alc_white_cluster(Xw_train,Xw_val)
     # features
-    fr=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
-    fw=['fixed_acidity_s', 'volatile_acidity_s', 'free_so2_s', 'total_so2_s', 'sulphates_s', 'hi_den_lo_alc_s', 'lo_den_hi_alc_s', 'med_den_lo_alc_s']
+    fr=['total_so2_s_s', 'sulphates_s_s', 'alcohol_s_s', 'hi_acid_low_sug_s']
+    fw=['fixed_acidity_s_s', 'volatile_acidity_s_s', 'free_so2_s_s', 'total_so2_s_s', 'sulphates_s_s', 'hi_den_low_alc_s', 'low_den_hi_alc_s', 'med_den_low_alc_s']
     # polynomial feature regression
     pfr = PolynomialFeatures(degree=3)
     pfw = PolynomialFeatures(degree=3)
@@ -335,14 +309,13 @@ def cluster_model(Xr_train,Xw_train,yr_train,yw_train,Xr_val,Xw_val,yr_val,yw_va
     rmse_trw,r2_tr = metrics_reg(yw_train,pred_prw_tr)
     pred_prw_v = prw.predict(Xw_val_pf)
     rmse_vw,r2_v = metrics_reg(yw_val,pred_prw_v)
-    print('Linear Reg  Red:        White:')
+    print('Linear Reg        Red          White')
     print(f'Train       RMSE: {round(rmse_trr,2)}  RMSE:  {round(rmse_trw,2)}')
     print(f'Validate    RMSE: {round(rmse_vr,2)}  RMSE:  {round(rmse_vw,2)}')
-
 def test_model(Xr_train,Xw_train,yr_train,yw_train,Xr_test,Xw_test,yr_test,yw_test):
     '''Input scaled train and test data and it will return RMSE test results'''
     # features
-    fr=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'alcohol_s']
+    fr=['volatile_acidity_s', 'total_so2_s', 'sulphates_s', 'alcohol_s']
     fw=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'alcohol_s']
     # polynomial feature regression
     pfr = PolynomialFeatures(degree=3)
@@ -362,13 +335,12 @@ def test_model(Xr_train,Xw_train,yr_train,yw_train,Xr_test,Xw_test,yr_test,yw_te
     # metrics white
     pred_prw_t = prw.predict(Xw_test_pf)
     rmse_tw,r2_t = metrics_reg(yw_test,pred_prw_t)
-    print('Poly Cluster  Red:        White:')
+    print('Poly Cluster        Red          White')
     print(f'Test          RMSE: {round(rmse_tr,2)}  RMSE:  {round(rmse_tw,2)}')
-
 def plt_err(Xr_train,Xw_train,yr_train,yw_train,Xr_test,Xw_test,yr_test,yw_test):
     '''plot predicted vs actual property values by inputting train and test'''
     # features
-    fr=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'alcohol_s']
+    fr=['volatile_acidity_s', 'total_so2_s', 'sulphates_s', 'alcohol_s']
     fw=['fixed_acidity_s', 'volatile_acidity_s', 'citric_acid_s', 'chlorides_s', 'free_so2_s', 'total_so2_s', 'alcohol_s']
     # polynomial feature regression
     pfr = PolynomialFeatures(degree=3)
